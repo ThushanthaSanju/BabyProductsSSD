@@ -1,6 +1,6 @@
 <?php
 
-$mysqli = new mysqli('localhost:3308', 'root', '', 'shanbaby') or die(mysqli_error($mysqli));
+$mysqli = new mysqli('localhost:3306', 'root', '', 'shanbaby') or die(mysqli_error($mysqli));
 
 
 //check user clicked delete button
