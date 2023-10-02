@@ -1,4 +1,5 @@
-<?php session_start();
+<?php header_remove('X-Powered-By');
+session_start();
 include('functions.php');
 if (!isset($_SESSION["loginerror"])) {
     $_SESSION["loginerror"] = "";
