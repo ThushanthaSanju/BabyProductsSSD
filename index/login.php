@@ -1,8 +1,10 @@
-<?php session_start();
+<?php
+session_start();
 if (!isset($_SESSION["loginerror"])) {
     $_SESSION["loginerror"] = "";
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -15,7 +17,6 @@ if (!isset($_SESSION["loginerror"])) {
 </head>
 
 <body>
-
     <div>
         <?php
         require 'connection.php';
@@ -23,21 +24,35 @@ if (!isset($_SESSION["loginerror"])) {
             $email = $_POST["txtEmail"];
             $password = $_POST["txtPassword"];
 
-            $sql = "SELECT * FROM `customer` WHERE `email`='" . $email . "' and `password`='" . $password . "'";
-
+            // Use prepared statements and parameterized queries to prevent SQL injection
+            $sql = "SELECT * FROM `customer` WHERE `email`=? AND `password`=?";
             $_SESSION["loginerror"] = "";
-            $result = mysqli_query($conn, $sql);
 
-            if (mysqli_num_rows($result) > 0) {
+            // Prepare the SQL statement
+            $stmt = mysqli_prepare($conn, $sql);
+
+            // Bind parameters
+            mysqli_stmt_bind_param($stmt, "ss", $email, $password);
+
+            // Execute the statement
+            mysqli_stmt_execute($stmt);
+
+            // Store the result
+            mysqli_stmt_store_result($stmt);
+
+            if (mysqli_stmt_num_rows($stmt) > 0) {
                 $_SESSION["userEmail"] = $email;
                 header('Location:index.php');
                 mysqli_close($conn);
             } else {
                 $_SESSION["loginerror"] = "Username or Password Does not match";
             }
-        } ?>
-    </div>
 
+            // Close the statement
+            mysqli_stmt_close($stmt);
+        }
+        ?>
+    </div>
 
     <?php require 'header.php' ?>
     <br>
@@ -56,7 +71,6 @@ if (!isset($_SESSION["loginerror"])) {
                 <p class="formLable">Password</p>
                 <input class="inputField" type="password" name="txtPassword" id="txtPassword" /><br>
                 <input id="btnSubmit" type="submit" name="login" value="Login" onclick="validateLogin()" />
-
             </div>
         </form>
     </div>
