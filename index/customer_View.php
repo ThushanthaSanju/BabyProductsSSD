@@ -89,7 +89,7 @@ if (!isset($_SESSION['adminsUsername'])) {
 
         <form action="component/customer_View_action.php">
             <?php
-            $mysqli = new mysqli('localhost:3308', 'root', '', 'shanbaby') or die(mysqli_error($mysqli));
+            $mysqli = new mysqli('localhost:3306', 'root', '', 'shanbaby') or die(mysqli_error($mysqli));
             $result = $mysqli->query("SELECT * FROM customer") or die($mysqli->error);
             ?>
 

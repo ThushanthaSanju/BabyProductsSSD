@@ -1,29 +1,30 @@
-<?php session_start();
+<?php
+session_start();
 require("connection.php");
 include("functions.php");
-?>
 
-<?php
-
-if (isset($_GET['pro_id'])) {
-
-    $product_id = $_GET['pro_id'];
-
-    $get_product = "select * from product where productID='$product_id'";
-
-    $run_product = mysqli_query($conn, $get_product);
-
-    $row_product = mysqli_fetch_array($run_product);
-
-    $pro_title = $row_product['productName'];
-
-    $pro_price = $row_product['unitPrice'];
-
-    $pro_desc = $row_product['description'];
-
-    $pro_img = $row_product['imageLocation'];
+function sanitizeInput($input) {
+    // Use htmlspecialchars to convert special characters to HTML entities
+    return htmlspecialchars($input, ENT_QUOTES, 'UTF-8');
 }
 
+if (isset($_GET['pro_id'])) {
+    $product_id = sanitizeInput($_GET['pro_id']);
+
+    // Use prepared statements to prevent SQL injection
+    $get_product = "SELECT * FROM product WHERE productID=?";
+    $stmt = mysqli_prepare($conn, $get_product);
+    mysqli_stmt_bind_param($stmt, "s", $product_id);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+
+    if ($row_product = mysqli_fetch_array($result)) {
+        $pro_title = sanitizeInput($row_product['productName']);
+        $pro_price = sanitizeInput($row_product['unitPrice']);
+        $pro_desc = sanitizeInput($row_product['description']);
+        $pro_img = sanitizeInput($row_product['imageLocation']);
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -52,9 +53,7 @@ if (isset($_GET['pro_id'])) {
             <ul>
                 <li>
                     <a class='Ctitle' href="products.php"> All Products </a>
-
                 </li>
-
                 <?php getCat(); ?>
             </ul>
         </div>
