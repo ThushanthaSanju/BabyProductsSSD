@@ -1,0 +1,51 @@
+.insertProduct {
+  width: 700px;
+  height: 100%;
+  background-color: #e7e7e9;
+  position: relative;
+  margin: 50px auto;
+  padding: 5px 5px 25px 25px;
+  text-align: center;
+  box-shadow: 5px 5px 13px #cbcecf, -5px -5px 10px #ffffff;
+  border-radius: 10px;
+}
+
+.insertProduct label {
+  width: 30%;
+  display: inline-block;
+  margin-right: 10px;
+  text-align: left;
+  font-weight: bold;
+  float: left;
+}
+
+.form-control {
+  height: 25px;
+  width: 50%;
+  box-shadow: 2px 2px 5px #cbcecf, -1px -1px 5px #ffffff,
+    inset 2px 2px 3px rgba(0, 0, 0, 0.2), inset -2px -2px 3px #ffffff85;
+  border: 0px;
+  border-radius: 5px;
+  background-color: #f1f1f1;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.form-group {
+  margin-top: 25px;
+}
+.btn {
+  background: #27ae60;
+  color: aliceblue;
+  border: 0px;
+  border-radius: 5px;
+  width: 200px;
+  height: 40px;
+  font-weight: bold;
+  box-shadow: 2px 2px 5px #4e8f69, -1px -1px 10px #76f0d1;
+}
+
+.btn:clicked {
+  transform: scale(0.9);
+}
+
