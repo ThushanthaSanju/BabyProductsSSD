@@ -25,36 +25,31 @@ if (!isset($_SESSION["loginerror"])) {
             $password = $_POST["txtPassword"];
 
             // Use prepared statements and parameterized queries to prevent SQL injection
-            $sql = "SELECT password FROM `customer` WHERE `email`=?";
+            $sql = "SELECT * FROM `customer` WHERE `email`=? AND `password`=?";
             $_SESSION["loginerror"] = "";
 
             // Prepare the SQL statement
             $stmt = mysqli_prepare($conn, $sql);
 
             // Bind parameters
-            mysqli_stmt_bind_param($stmt, "s", $email);
+            mysqli_stmt_bind_param($stmt, "ss", $email, $password);
 
             // Execute the statement
             mysqli_stmt_execute($stmt);
 
             // Store the result
-            mysqli_stmt_bind_result($stmt, $hashedPassword);
+            mysqli_stmt_store_result($stmt);
 
-            if (mysqli_stmt_fetch($stmt)) {
-                // Verify the hashed password
-                if (password_verify($password, $hashedPassword)) {
-                    $_SESSION["userEmail"] = $email;
-                    header('Location:index.php');
-                } else {
-                    $_SESSION["loginerror"] = "Username or Password Does not match";
-                }
+            if (mysqli_stmt_num_rows($stmt) > 0) {
+                $_SESSION["userEmail"] = $email;
+                header('Location:index.php');
+                mysqli_close($conn);
             } else {
                 $_SESSION["loginerror"] = "Username or Password Does not match";
             }
 
             // Close the statement
             mysqli_stmt_close($stmt);
-            mysqli_close($conn);
         }
         ?>
     </div>
