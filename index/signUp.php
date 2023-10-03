@@ -1,4 +1,5 @@
 <?php
+header('X-Content-Type-Options: nosniff');
 header_remove('X-Powered-By');
 session_start();
 include('functions.php');
