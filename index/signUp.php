@@ -21,8 +21,6 @@ if (isset($_POST['create'])) {
     $txtPassword = $_POST['txtPassword'];
     $txtCPassword = $_POST['txtCPassword'];
 
-    $hashedPassword = password_hash($txtPassword, PASSWORD_DEFAULT);
-
     try {
         $pdo = new PDO('mysql:host=localhost:3306;dbname=shanbaby', 'root', '');
         
@@ -44,7 +42,7 @@ if (isset($_POST['create'])) {
         $stmt->bindParam(6, $txtPostal, PDO::PARAM_STR);
         $stmt->bindParam(7, $txtCountry, PDO::PARAM_STR);
         $stmt->bindParam(8, $txtEmail, PDO::PARAM_STR);
-        $stmt->bindParam(9, $hashedPassword, PDO::PARAM_STR);
+        $stmt->bindParam(9, $txtPassword, PDO::PARAM_STR);
 
         // Execute the statement
         $stmt->execute();
