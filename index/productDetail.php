@@ -1,5 +1,11 @@
 <?php
 session_start();
+
+// Generate a random CSRF token if it doesn't exist in the session
+if (!isset($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32)); // Generate a 256-bit random token
+}
+
 require("connection.php");
 include("functions.php");
 
@@ -45,9 +51,7 @@ if (isset($_GET['pro_id'])) {
     <?php require 'navbar.php' ?>
     <div class="cat_panel">
         <div class="cat_title">
-            <h3>
-                Product Categories
-            </h3>
+            <h3>Product Categories</h3>
         </div>
         <div class="cat_body">
             <ul>
@@ -59,23 +63,24 @@ if (isset($_GET['pro_id'])) {
         </div>
     </div>
 
-    <div class="tble" style="display: table;  padding-left: 40px; padding-top: 50px;">
+    <div class="tble" style="display: table; padding-left: 40px; padding-top: 50px;">
         <div class="row" style="display: table-row;">
             <div class="img" style="
-  display: table-cell; width:60%; 
-  margin-left: 50px;">
+                display: table-cell; width:60%; 
+                margin-left: 50px;">
                 <img style="
-  width: 100%;" src="../source/Images/product_images/<?php echo $pro_img; ?>">
+                width: 100%;" src="../source/Images/product_images/<?php echo $pro_img; ?>">
             </div>
             <div class="details" style="
-  display: table-cell;  ">
+                display: table-cell;  ">
                 <div class="box" style="margin-bottom: 50px; width:40%; padding: 50px; vertical-align: middle; float:left; margin-left: 120px; text-align: center; 
-  box-shadow: 5px 5px 7px #cbcecf, -5px -5px 7px #ffffff; border-radius: 10px; ">
+                box-shadow: 5px 5px 7px #cbcecf, -5px -5px 7px #ffffff; border-radius: 10px; ">
                     <h3 style="padding-bottom: 20px"> <?php echo $pro_title; ?></h3>
 
                     <?php add_cart(); ?>
 
                     <form method="post" action="productDetail.php?add_cart=<?php echo $product_id; ?>" class="form">
+                        <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                         <label style="font-size: 18px;">Product Quantity</label><br><br>
                         <input name="quantity" type="text" value="1" style="text-align: center;" required>
                         <p class="price">RS: <?php echo $pro_price; ?></p>

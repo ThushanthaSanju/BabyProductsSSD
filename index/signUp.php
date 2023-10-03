@@ -1,5 +1,12 @@
-<?php session_start();
-include('functions.php') ?>
+<?php
+session_start();
+require 'functions.php';
+// Generate a random CSRF token if it doesn't exist in the session
+if (!isset($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32)); // Generate a 256-bit random token
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -24,6 +31,7 @@ include('functions.php') ?>
   <?php addCustomer() ?>
   <form id="form1" name="form1" method="post" action="signUp.php" onsubmit="return validateSignUp()">
     <div id="form">
+      <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
       <p class="formLable">First Name</p>
       <input class="inputField" type="text" name="txtfName" id="txtfName" /><br>
       <p class="formLable">Last Name</p>

@@ -299,10 +299,15 @@ function add_cart()
 
 function addCustomer()
 {
-
     require 'connection.php';
 
     if (isset($_POST["create"])) {
+        // Validate CSRF token
+        if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+            echo "CSRF Token Validation Failed. Please try again.";
+            exit();
+        }
+
         $fname = $_POST["txtfName"];
         $lname = $_POST["txtlName"];
         $phone = $_POST["txtPhone"];
@@ -314,14 +319,14 @@ function addCustomer()
         $country = $_POST["txtCountry"];
         $pw = $_POST["txtPassword"];
 
-
         $sql = "INSERT INTO `customer` (`firstName`, `lastName`, `email`, `address`, `country`, `postalCode`, `phone`, `password`, `city`) VALUES ('" . $fname . "', '" . $lname . "', '" . $email . "', '" . $address . "', '" . $country . "', '" . $postal . "', '" . $phone . "', '" . $pw . "', '" . $city . "');";
 
         mysqli_query($conn, $sql);
 
-        header('Location:login.php');
+        header('Location: login.php');
     }
 }
+
 
 
 //---------Function to get cart items ------------// 

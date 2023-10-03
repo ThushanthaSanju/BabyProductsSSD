@@ -1,8 +1,13 @@
-<?php session_start();
-if (!isset($_SESSION["loginerror"])) {
-    $_SESSION["loginerror"] = "";
+<?php
+session_start();
+
+// Generate a random CSRF token if it doesn't exist in the session
+if (!isset($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32)); // Generate a 256-bit random token
 }
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -17,9 +22,17 @@ if (!isset($_SESSION["loginerror"])) {
 <body>
 
     <div>
-        <?php
+    <?php
         require 'connection.php';
+
+        // Check if the CSRF token in the form matches the one in the session
         if (isset($_POST["login"])) {
+            if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+                $_SESSION["loginerror"] = "CSRF Token Validation Failed. Please try again.";
+                header('Location: login.php');
+                exit();
+            }
+
             $email = $_POST["txtEmail"];
             $password = $_POST["txtPassword"];
 
@@ -30,12 +43,14 @@ if (!isset($_SESSION["loginerror"])) {
 
             if (mysqli_num_rows($result) > 0) {
                 $_SESSION["userEmail"] = $email;
-                header('Location:index.php');
+                header('Location: index.php');
                 mysqli_close($conn);
             } else {
                 $_SESSION["loginerror"] = "Username or Password Does not match";
             }
-        } ?>
+        }
+        ?>
+
     </div>
 
 
@@ -51,6 +66,7 @@ if (!isset($_SESSION["loginerror"])) {
 
         <form id="form2" name="form2" method="post" action="login.php" onsubmit="return validateLogin()">
             <div id="form">
+                <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                 <p class="formLable">Email</p>
                 <input class="inputField" type="text" name="txtEmail" id="txtEmail" /><br>
                 <p class="formLable">Password</p>

@@ -1,7 +1,12 @@
-<?php session_start();
-require("connection.php");
-include("functions.php");
+<?php
+session_start();
+
+// Generate a random CSRF token if it doesn't exist in the session
+if (!isset($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32)); // Generate a 256-bit random token
+}
 ?>
+
 
 <!-- check if there is an user session -->
 <?php
