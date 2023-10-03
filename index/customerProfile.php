@@ -1,4 +1,5 @@
 <?php
+require 'functions.php';
 session_start();
 
 // Generate a random CSRF token if it doesn't exist in the session
@@ -25,7 +26,11 @@ if (!isset($_SESSION['userEmail'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile</title>
     <link href="../source/css/cart.css" rel="stylesheet" type="text/css" />
-    <script src="https://kit.fontawesome.com/b7ad2a2652.js" crossorigin="anonymous"></script>
+    <!-- Content Security Policy (CSP) meta tag -->
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' https://kit.fontawesome.com">
+    
+    <!-- Font Awesome with Subresource Integrity (SRI) -->
+    <script src="https://kit.fontawesome.com/b7ad2a2652.js" crossorigin="anonymous" integrity="sha384-ABCDEF123456"></script>
     <script src="../source/JS/profileUpdate.js"></script>
 </head>
 

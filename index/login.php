@@ -7,7 +7,6 @@ if (!isset($_SESSION['csrf_token'])) {
 }
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -38,7 +37,7 @@ if (!isset($_SESSION['csrf_token'])) {
 
             $sql = "SELECT * FROM `customer` WHERE `email`='" . $email . "' and `password`='" . $password . "'";
 
-            $_SESSION["loginerror"] = "";
+            $_SESSION["loginerror"] = ""; // Initialize the session variable
             $result = mysqli_query($conn, $sql);
 
             if (mysqli_num_rows($result) > 0) {
@@ -80,7 +79,8 @@ if (!isset($_SESSION['csrf_token'])) {
         <label id="vEmail"></label>
         <label id="vPassword"></label>
     </div>
-    <span id="validatuser"><?php echo "<p style='color:red; text-align:center;'>" . $_SESSION["loginerror"] . "</p>";  ?></span>
+    <!-- Check if the "loginerror" key exists in the session before displaying it -->
+    <span id="validatuser"><?php echo isset($_SESSION["loginerror"]) ? "<p style='color:red; text-align:center;'>" . $_SESSION["loginerror"] . "</p>" : "";  ?></span>
     <iframe name="hiddenFrame" width="0" height="0" style="display: none;"></iframe>
 </body>
 
