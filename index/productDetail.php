@@ -76,9 +76,7 @@ if (isset($_GET['pro_id'])) {
                 <div class="box" style="margin-bottom: 50px; width:40%; padding: 50px; vertical-align: middle; float:left; margin-left: 120px; text-align: center; 
                 box-shadow: 5px 5px 7px #cbcecf, -5px -5px 7px #ffffff; border-radius: 10px; ">
                     <h3 style="padding-bottom: 20px"> <?php echo $pro_title; ?></h3>
-
                     <?php add_cart(); ?>
-
                     <form method="post" action="productDetail.php?add_cart=<?php echo $product_id; ?>" class="form">
                         <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                         <label style="font-size: 18px;">Product Quantity</label><br><br>
