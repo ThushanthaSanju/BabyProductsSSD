@@ -76,8 +76,9 @@ if (!isset($_SESSION['csrf_token'])) {
         <div id="title">
             <h2 style="color: red;">Login</h2>
             <p>If you don't have an account <a href="signUp.php">Sign Up</a></p>
+           
         </div>
-
+        <a href="../callback.php">Login with Google</a>
         <form id="form2" name="form2" method="post" action="login.php" onsubmit="return validateLogin()">
             <div id="form">
                 <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
