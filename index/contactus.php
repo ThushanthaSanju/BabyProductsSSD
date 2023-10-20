@@ -5,7 +5,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Contact US</title>
-    <script src="https://kit.fontawesome.com/b7ad2a2652.js" crossorigin="anonymous"></script>
+      <!-- Add the Content Security Policy (CSP) meta tag -->
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' https://kit.fontawesome.com">
+    <script src="https://kit.fontawesome.com/b7ad2a2652.js" crossorigin="anonymous" integrity="sha384-ABCDEF123456"></script>
 
     <style>
         .container {

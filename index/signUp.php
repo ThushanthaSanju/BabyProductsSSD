@@ -1,58 +1,9 @@
 <?php
-header('X-Content-Type-Options: nosniff');
-header_remove('X-Powered-By');
 session_start();
-include('functions.php');
-
-if (!isset($_SESSION["loginerror"])) {
-    $_SESSION["loginerror"] = "";
-}
-
-if (isset($_POST['create'])) {
-    // Get user input and sanitize it
-    $txtfName = filter_input(INPUT_POST, 'txtfName', FILTER_SANITIZE_STRING);
-    $txtlName = filter_input(INPUT_POST, 'txtlName', FILTER_SANITIZE_STRING);
-    $txtPhone = filter_input(INPUT_POST, 'txtPhone', FILTER_SANITIZE_STRING);
-    $txtAddress = filter_input(INPUT_POST, 'txtAddress', FILTER_SANITIZE_STRING);
-    $txtCity = filter_input(INPUT_POST, 'txtCity', FILTER_SANITIZE_STRING);
-    $txtPostal = filter_input(INPUT_POST, 'txtPostal', FILTER_SANITIZE_STRING);
-    $txtCountry = filter_input(INPUT_POST, 'txtCountry', FILTER_SANITIZE_STRING);
-    $txtEmail = filter_input(INPUT_POST, 'txtEmail', FILTER_SANITIZE_EMAIL);
-    $txtPassword = $_POST['txtPassword'];
-    $txtCPassword = $_POST['txtCPassword'];
-
-    try {
-        $pdo = new PDO('mysql:host=localhost:3306;dbname=shanbaby', 'root', '');
-        
-        // Set the PDO error mode to exception
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-        // SQL query with placeholders
-        $sql = "INSERT INTO customers (first_name, last_name, phone, address, city, postal_code, country, email, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        
-        // Prepare the statement
-        $stmt = $pdo->prepare($sql);
-
-        // Bind parameters
-        $stmt->bindParam(1, $txtfName, PDO::PARAM_STR);
-        $stmt->bindParam(2, $txtlName, PDO::PARAM_STR);
-        $stmt->bindParam(3, $txtPhone, PDO::PARAM_STR);
-        $stmt->bindParam(4, $txtAddress, PDO::PARAM_STR);
-        $stmt->bindParam(5, $txtCity, PDO::PARAM_STR);
-        $stmt->bindParam(6, $txtPostal, PDO::PARAM_STR);
-        $stmt->bindParam(7, $txtCountry, PDO::PARAM_STR);
-        $stmt->bindParam(8, $txtEmail, PDO::PARAM_STR);
-        $stmt->bindParam(9, $txtPassword, PDO::PARAM_STR);
-
-        // Execute the statement
-        $stmt->execute();
-
-        // Redirect the user to a success page or perform any other necessary actions
-        header("Location: success.php");
-        exit;
-    } catch (PDOException $e) {
-        echo "Error: " . $e->getMessage();
-    }
+require 'functions.php';
+// Generate a random CSRF token if it doesn't exist in the session
+if (!isset($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32)); // Generate a 256-bit random token
 }
 ?>
 
@@ -72,6 +23,7 @@ if (isset($_POST['create'])) {
     <br>
     <br><br>
 
+
     <div id="signupContainer">
         <div id="title">
             <h2>Sign Up</h2>
@@ -80,6 +32,7 @@ if (isset($_POST['create'])) {
         <?php addCustomer() ?>
         <form id="form1" name="form1" method="post" action="signUp.php" onsubmit="return validateSignUp()">
             <div id="form">
+                  <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                 <p class="formLable">First Name</p>
                 <input class="inputField" type="text" name="txtfName" id="txtfName" /><br>
                 <p class="formLable">Last Name</p>
@@ -101,8 +54,8 @@ if (isset($_POST['create'])) {
                 <p class="formLable">Confirm Password</p>
                 <input class="inputField" type="password" name="txtCPassword" id="txtCPassword" /><br>
 
-                <input id="btnSubmit" type="submit" name="create" value="Sign Up" />
-                <input type="reset" name="btnReset" id="btnReset" value="Reset" />
+      <input id="btnSubmit" type="submit" name="create" value="Sign Up" />
+      <input type="reset" name="btnReset" id="btnReset" value="Reset" />
 
             </div>
         </form>
