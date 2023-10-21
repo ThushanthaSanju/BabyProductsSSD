@@ -6,9 +6,9 @@ use League\OAuth2\Client\Provider\Google;
 
 // Now you can use the Google provider class in your script
 $provider = new Google([
-    'clientId'     => '373745285609-b8q0ui0o5bj6c4lnp4s8th6ba6hboo2h.apps.googleusercontent.com',
-    'clientSecret' => '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',
-    'redirectUri'  => 'http://localhost/BabyProducts/index/index.php',
+    'clientId'     => '316309972127-6om911rfqpeghblo6gcet4sk84nkkv4u.apps.googleusercontent.com',
+    'clientSecret' => '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',
+    'redirectUri'  => 'http://localhost:8080/ShanBabyProducts/index/index.php',
 ]);
 
 // Handle the OAuth callback

@@ -12,7 +12,7 @@
                 <a href="adminLogin.php">Admin Log</a>
 
                 <?php
-                if (!isset($_SESSION['userEmail'])) {
+                if (!isset($user)) {
                     echo '<a href="login.php">Login</a>';
                     echo '<a href="signUp.php">Sign Up</a>';
                 } else {
